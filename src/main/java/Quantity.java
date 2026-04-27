@@ -4,9 +4,27 @@ public class Quantity {
     private final LengthUnit unit;
 
     public Quantity(double value, LengthUnit unit) {
+
+        if (unit == null) {
+            throw new IllegalArgumentException("Unit cannot be null");
+        }
+
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Invalid value");
+        }
+
         this.value = value;
         this.unit = unit;
     }
+
+    public double getValue() {
+        return value;
+    }
+
+    public LengthUnit getUnit() {
+        return unit;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -17,11 +35,13 @@ public class Quantity {
 
         Quantity other = (Quantity) obj;
 
-        double thisInFeet = this.unit.toFeet(this.value);
-        double otherInFeet = other.unit.toFeet(other.value);
+        double thisInFeet = this.unit.convertToBaseUnit(this.value);
+        double otherInFeet = other.unit.convertToBaseUnit(other.value);
 
         return Double.compare(thisInFeet, otherInFeet) == 0;
     }
+
+
     public static double convert(double value, LengthUnit source, LengthUnit target) {
 
         if (source == null || target == null) {
@@ -32,48 +52,40 @@ public class Quantity {
             throw new IllegalArgumentException("Invalid value");
         }
 
-        // convert to base (feet)
-        double valueInFeet = source.toFeet(value);
+        double base = source.convertToBaseUnit(value);
 
-        // convert from feet to target
-        return valueInFeet / target.toFeet(1.0);
-    }public static Quantity add(Quantity q1, Quantity q2) {
+        return target.convertFromBaseUnit(base);
+    }
+
+
+    public static Quantity add(Quantity q1, Quantity q2) {
 
         if (q1 == null || q2 == null) {
             throw new IllegalArgumentException("Quantity cannot be null");
         }
 
-        // convert both to base unit (feet)
-        double q1InFeet = q1.unit.toFeet(q1.value);
-        double q2InFeet = q2.unit.toFeet(q2.value);
+        double sumFeet =
+                q1.unit.convertToBaseUnit(q1.value)
+                        + q2.unit.convertToBaseUnit(q2.value);
 
-        // add
-        double sumInFeet = q1InFeet + q2InFeet;
-
-        // convert back to unit of first operand
-        double resultValue = sumInFeet / q1.unit.toFeet(1.0);
+        double resultValue = q1.unit.convertFromBaseUnit(sumFeet);
 
         return new Quantity(resultValue, q1.unit);
     }
+
+    // ================= ADD WITH TARGET (UC7) =================
     public static Quantity add(Quantity q1, Quantity q2, LengthUnit targetUnit) {
 
         if (q1 == null || q2 == null || targetUnit == null) {
             throw new IllegalArgumentException("Invalid input");
         }
 
-        // convert both to base unit (feet)
-        double q1InFeet = q1.unit.toFeet(q1.value);
-        double q2InFeet = q2.unit.toFeet(q2.value);
+        double sumFeet =
+                q1.unit.convertToBaseUnit(q1.value)
+                        + q2.unit.convertToBaseUnit(q2.value);
 
-        // add
-        double sumInFeet = q1InFeet + q2InFeet;
-
-        // convert to target unit
-        double resultValue = sumInFeet / targetUnit.toFeet(1.0);
+        double resultValue = targetUnit.convertFromBaseUnit(sumFeet);
 
         return new Quantity(resultValue, targetUnit);
-    }
-    public double getValue() {
-        return value;
     }
 }

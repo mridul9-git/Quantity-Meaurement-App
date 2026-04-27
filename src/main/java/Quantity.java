@@ -55,4 +55,25 @@ public class Quantity {
 
         return new Quantity(resultValue, q1.unit);
     }
+    public static Quantity add(Quantity q1, Quantity q2, LengthUnit targetUnit) {
+
+        if (q1 == null || q2 == null || targetUnit == null) {
+            throw new IllegalArgumentException("Invalid input");
+        }
+
+        // convert both to base unit (feet)
+        double q1InFeet = q1.unit.toFeet(q1.value);
+        double q2InFeet = q2.unit.toFeet(q2.value);
+
+        // add
+        double sumInFeet = q1InFeet + q2InFeet;
+
+        // convert to target unit
+        double resultValue = sumInFeet / targetUnit.toFeet(1.0);
+
+        return new Quantity(resultValue, targetUnit);
+    }
+    public double getValue() {
+        return value;
+    }
 }

@@ -118,4 +118,41 @@ class QuantityMeasurementAppTest {
         assertEquals(new Quantity(5.0, LengthUnit.FEET),
                 Quantity.add(q1, q2));
     }
+    @Test
+    void testAddition_TargetFeet() {
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
+
+        assertEquals(new Quantity(2.0, LengthUnit.FEET),
+                Quantity.add(q1, q2, LengthUnit.FEET));
+    }
+
+    @Test
+    void testAddition_TargetInch() {
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
+
+        assertEquals(new Quantity(24.0, LengthUnit.INCH),
+                Quantity.add(q1, q2, LengthUnit.INCH));
+    }
+
+    @Test
+    void testAddition_TargetYard() {
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
+
+        Quantity result = Quantity.add(q1, q2, LengthUnit.YARD);
+
+        assertEquals(0.666666, result.getValue(), 1e-3);
+    }
+    @Test
+    void testAddition_TargetCM() {
+        Quantity q1 = new Quantity(2.54, LengthUnit.CM);
+        Quantity q2 = new Quantity(1.0, LengthUnit.INCH);
+
+        Quantity result = Quantity.add(q1, q2, LengthUnit.CM);
+
+        assertEquals(5.08, result.getValue(), 1e-2);
+    }
+
 }

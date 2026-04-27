@@ -154,5 +154,37 @@ class QuantityMeasurementAppTest {
 
         assertEquals(5.08, result.getValue(), 1e-2);
     }
+    @Test
+    void testKgToGramEquality() {
+        assertTrue(
+                new QuantityWeight(1.0, WeightUnit.KILOGRAM)
+                        .equals(new QuantityWeight(1000.0, WeightUnit.GRAM))
+        );
+    }
+
+    @Test
+    void testKgToPoundEquality() {
+        assertTrue(
+                new QuantityWeight(1.0, WeightUnit.KILOGRAM)
+                        .equals(new QuantityWeight(2.20462, WeightUnit.POUND))
+        );
+    }
+
+    @Test
+    void testConversion() {
+        QuantityWeight q = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
+
+        assertEquals(1000.0,
+                q.convertTo(WeightUnit.GRAM).getValue());
+    }
+
+    @Test
+    void testAddition() {
+        QuantityWeight q1 = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
+        QuantityWeight q2 = new QuantityWeight(1000.0, WeightUnit.GRAM);
+
+        assertEquals(2.0,
+                QuantityWeight.add(q1, q2).getValue());
+    }
 
 }

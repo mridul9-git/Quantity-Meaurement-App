@@ -22,4 +22,20 @@ public class Quantity {
 
         return Double.compare(thisInFeet, otherInFeet) == 0;
     }
+    public static double convert(double value, LengthUnit source, LengthUnit target) {
+
+        if (source == null || target == null) {
+            throw new IllegalArgumentException("Unit cannot be null");
+        }
+
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Invalid value");
+        }
+
+        // convert to base (feet)
+        double valueInFeet = source.toFeet(value);
+
+        // convert from feet to target
+        return valueInFeet / target.toFeet(1.0);
+    }
 }

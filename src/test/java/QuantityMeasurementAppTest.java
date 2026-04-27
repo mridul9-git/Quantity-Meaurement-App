@@ -33,13 +33,8 @@ class QuantityMeasurementAppTest {
 
         assertTrue(q1.equals(q2));
     }
-    @Test
-    void testYardToFeet() {
-        Quantity q1 = new Quantity(1.0, LengthUnit.YARD);
-        Quantity q2 = new Quantity(3.0, LengthUnit.FEET);
 
-        assertTrue(q1.equals(q2));
-    }
+
 
     @Test
     void testYardToInch() {
@@ -49,13 +44,7 @@ class QuantityMeasurementAppTest {
         assertTrue(q1.equals(q2));
     }
 
-    @Test
-    void testCmToInch() {
-        Quantity q1 = new Quantity(1.0, LengthUnit.CM);
-        Quantity q2 = new Quantity(0.393701, LengthUnit.INCH);
 
-        assertTrue(q1.equals(q2));
-    }
 
     @Test
     void testDifferentUnitsNotEqual() {
@@ -63,5 +52,35 @@ class QuantityMeasurementAppTest {
         Quantity q2 = new Quantity(1.0, LengthUnit.FEET);
 
         assertFalse(q1.equals(q2));
+    }
+    @Test
+    void testFeetToInches() {
+        assertEquals(12.0,
+                Quantity.convert(1.0, LengthUnit.FEET, LengthUnit.INCH));
+    }
+
+    @Test
+    void testInchesToFeet() {
+        assertEquals(2.0,
+                Quantity.convert(24.0, LengthUnit.INCH, LengthUnit.FEET));
+    }
+
+    @Test
+    void testYardToFeet() {
+        assertEquals(3.0,
+                Quantity.convert(1.0, LengthUnit.YARD, LengthUnit.FEET));
+    }
+
+    @Test
+    void testCmToInch() {
+        assertEquals(0.393701,
+                Quantity.convert(1.0, LengthUnit.CM, LengthUnit.INCH),
+                1e-6);
+    }
+
+    @Test
+    void testZero() {
+        assertEquals(0.0,
+                Quantity.convert(0.0, LengthUnit.FEET, LengthUnit.INCH));
     }
 }

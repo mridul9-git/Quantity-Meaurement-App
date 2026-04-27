@@ -37,5 +37,22 @@ public class Quantity {
 
         // convert from feet to target
         return valueInFeet / target.toFeet(1.0);
+    }public static Quantity add(Quantity q1, Quantity q2) {
+
+        if (q1 == null || q2 == null) {
+            throw new IllegalArgumentException("Quantity cannot be null");
+        }
+
+        // convert both to base unit (feet)
+        double q1InFeet = q1.unit.toFeet(q1.value);
+        double q2InFeet = q2.unit.toFeet(q2.value);
+
+        // add
+        double sumInFeet = q1InFeet + q2InFeet;
+
+        // convert back to unit of first operand
+        double resultValue = sumInFeet / q1.unit.toFeet(1.0);
+
+        return new Quantity(resultValue, q1.unit);
     }
 }

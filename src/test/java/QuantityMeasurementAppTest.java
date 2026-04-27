@@ -83,4 +83,39 @@ class QuantityMeasurementAppTest {
         assertEquals(0.0,
                 Quantity.convert(0.0, LengthUnit.FEET, LengthUnit.INCH));
     }
+    @Test
+    void testFeetPlusFeet() {
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(2.0, LengthUnit.FEET);
+
+        assertEquals(new Quantity(3.0, LengthUnit.FEET),
+                Quantity.add(q1, q2));
+    }
+
+    @Test
+    void testFeetPlusInch() {
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
+
+        assertEquals(new Quantity(2.0, LengthUnit.FEET),
+                Quantity.add(q1, q2));
+    }
+
+    @Test
+    void testInchPlusFeet() {
+        Quantity q1 = new Quantity(12.0, LengthUnit.INCH);
+        Quantity q2 = new Quantity(1.0, LengthUnit.FEET);
+
+        assertEquals(new Quantity(24.0, LengthUnit.INCH),
+                Quantity.add(q1, q2));
+    }
+
+    @Test
+    void testWithZero() {
+        Quantity q1 = new Quantity(5.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(0.0, LengthUnit.INCH);
+
+        assertEquals(new Quantity(5.0, LengthUnit.FEET),
+                Quantity.add(q1, q2));
+    }
 }
